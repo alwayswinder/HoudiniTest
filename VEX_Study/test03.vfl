@@ -1,0 +1,38 @@
+int handle = pcopen(0, "P", @P, chf("radius"), chi("maxnum"));
+int num = pcnumfound(handle);
+
+int ptnum = -1;
+vector sum = 0;
+
+for (int i = 0; i < num; i++)
+{
+    pciterate(handle);
+
+    pcimport(handle, "point.number", ptnum);
+
+    vector pos = point(0, 'P', ptnum);
+    sum += pos;
+}
+pcclose(handle);
+
+@P = sum/num;
+
+
+/****************/
+vector sphere_pos = point(1, 'P', 0);
+int handle = pcopen(0, "P", sphere_pos, chf("radius"), chi("maxnum"));
+
+int ptnum = -1;
+float distance = 0;
+while (pciterate(handle))
+{
+    pcimport(handle, "point.number", ptnum);
+    pcimport(handle, "point.distance", distance);
+    if(distance > chf('radius') - chf('dis_clamp'))
+    {
+        vector pos = point(0, 'P', ptnum);
+        vector dir = normalize(pos - sphere_pos);
+        setpointattrib(0, 'P', ptnum, pos+dir*chf('push_dis'));
+    }
+    setpointattrib(0, 'Cd', ptnum, {1, 0, 0});
+}

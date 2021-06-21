@@ -1,0 +1,64 @@
+void RandAddPoint(int num)
+{
+    for (int i = 0; i < num; i++)
+    {
+        vector rand_pos = rand(i+0.1);
+        addpoint(0, rand_pos);
+    }    
+}
+
+RandAddPoint(100);
+
+
+int nearpt[] = nearpoints(0, @P, 1, chf('near_num'));
+for (int i = 1; i < len(nearpt); i++)
+{
+    if(nearpt[i] > @ptnum)
+    {
+        addprim(0, 'polyline', nearpt[i], @ptnum);    
+    }    
+}
+
+@Cd = colormap('opdef:/Object/mocapbiped3?clothing_001.jpg', @uv);
+v@Cd2 = colormap('opdef:/Object/mocapbiped3?clothing_004.jpg', @uv);
+
+
+
+int near_pt = nearpoint(1, @P, chf('../sphere1/scale'));
+i@npt = near_pt;
+
+vector target_pos = point(1, "P", 0);
+int near_pts[] = nearpoints(0, target_pos, chf('maxdist'), 10000);
+
+foreach (int near_pt; near_pts)
+{
+    vector cd2 = point(0, 'Cd2', near_pt);
+    setpointattrib(0, 'Cd', near_pt, cd2, 'set');
+}
+
+/**/
+void PointColorSpread(int center_point)
+{
+    int near_pts[] = neighbours(0, center_point);
+    foreach (int near_pt; near_pts)
+    {
+        if(near_pt > center_point)
+        {
+            setpointattrib(0, 'Cd', near_pt, {0, 0, 1}, 'set');
+            PointColorSpread(near_pt);
+        }
+    }
+}
+
+for (int i = 0; i < chi('iteration'); i++)
+{
+    if(point(0, 'binfection', @ptnum) == 1)
+    {
+        int near_pts[] = neighbours(0, @ptnum);
+        foreach (int near_pt; near_pts)
+        {
+           setpointattrib(0, 'Cd', near_pt, v@Cd2, 'set');
+           setpointattrib(0, 'binfection', near_pt, 1, 'set');
+        }
+    }
+}
