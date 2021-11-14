@@ -1,0 +1,7 @@
+PGEOMETRY V5
+NPoints 1 NPrims 1
+NPointGroups 0 NPrimGroups 0
+NPointAttrib 0 NVertexAttrib 0 NPrimAttrib 1 NAttrib 0
+0 6 0 1
+PrimitiveAttrib
+path 1 index 1 op:/obj/geo1/pack2
